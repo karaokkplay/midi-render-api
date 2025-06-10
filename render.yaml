@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: midi-render-api # Você pode mudar o nome se quiser
+    env: python
+    plan: free # O plano gratuito é suficiente para começar
+    # 💡 Comandos para construir o serviço:
+    buildCommand: |
+      # 1. Instala a biblioteca de sistema FluidSynth
+      apt-get update && apt-get install -y fluidsynth
+      # 2. Instala as bibliotecas Python
+      pip install -r requirements.txt
+    # 💡 Comando para iniciar o serviço:
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.4 # Usar uma versão estável do Python
