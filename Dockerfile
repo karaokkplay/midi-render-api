@@ -1,25 +1,23 @@
-# Use a imagem base oficial do Python
+# Usa uma imagem Python leve e oficial
 FROM python:3.11-slim
 
-# Passo 1: Instalar as dependências do sistema operacional
-# Isso garante que a biblioteca C do FluidSynth esteja disponível
+# PASSO 1: Instala a biblioteca de sistema FluidSynth
 RUN apt-get update && apt-get install -y --no-install-recommends fluidsynth
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia primeiro o arquivo de dependências para aproveitar o cache do Docker
+# Copia o arquivo de dependências
 COPY requirements.txt .
 
-# Passo 2: Instalar as dependências do Python
+# PASSO 2: Instala as dependências do Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia todo o resto do código da sua aplicação para o diretório de trabalho
+# Copia o resto do seu projeto
 COPY . .
 
-# Expõe a porta que a aplicação vai rodar (o Render vai mapear isso)
+# Expõe a porta que a API vai usar
 EXPOSE 10000
 
-# Passo 3: Define o comando para iniciar a aplicação
-# Usa o mesmo Start Command que tínhamos antes
+# PASSO 3: Comando para ligar a API
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
